@@ -69,7 +69,6 @@ python /content/OFA-Compress/main_distill.py \
     --weight-decay=${weight_decay} \
     --clip-grad=${clip_grad} \
     --lr=${lr} \
-    
     --batch-size=${batch_size} \
     --init-method=${init_method} \
     --student-model-config=${student_model_config} \
