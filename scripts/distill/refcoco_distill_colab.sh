@@ -5,7 +5,7 @@ memory=400000
 cpu=4000
 
 # data
-batch_size=4
+batch_size=8
 selected_cols=0,4,2,3
 max_src_length=80
 max_tgt_length=30
@@ -69,6 +69,7 @@ python /content/OFA-Compress/main_distill.py \
     --weight-decay=${weight_decay} \
     --clip-grad=${clip_grad} \
     --lr=${lr} \
+    --fp16 \
     --batch-size=${batch_size} \
     --init-method=${init_method} \
     --student-model-config=${student_model_config} \
