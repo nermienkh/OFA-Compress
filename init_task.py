@@ -6,7 +6,7 @@ from data_utils.snli_ve_dataset import Trie
 from data_utils.input_dataset import FileDataset as inputDataset
 import pickle
 import json, os
-TOKENIZER_PATH = "./tokenizer"
+TOKENIZER_PATH = "/content/OFA-Compress/tokenizer"
 
 def build_task(args):
     tokenizer = OFATokenizer.from_pretrained(TOKENIZER_PATH)

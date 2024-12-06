@@ -27,7 +27,7 @@ def get_data_loader(args, logger):
     logger.info("Get data loader")
 
     # Data parallel arguments.
-    num_workers = torch.distributed.get_world_size()
+    num_workers = 1#torch.distributed.get_world_size()
 
     if args.task in ["caption_stage1", "caption_stage2"]:
         dataset_class = CaptionDataset
@@ -60,7 +60,7 @@ def get_data_loader(args, logger):
             % (args.num_epochs, total_samples, num_workers, args.batch_size,
                samples_per_iter, args.train_iters))
     # Use a simple sampler with distributed batch sampler.
-    sampler = [DistributedSampler(dataset[i]) for i in range(len(args.train_dataset))]
+    sampler = [SequentialSampler(dataset[i]) for i in range(len(args.train_dataset))]
 
     samples_per_ga_step = args.micro_batch_size * num_workers
     logger.info(f"samples_per_ga_step: {samples_per_ga_step}")
@@ -148,6 +148,19 @@ def get_student_model(args):
     return model_S
 
 def initialize_distributed(args):
+   
+    
+    # Check if distributed training is required
+   # if not args.distributed:
+    print("Running in single machine mode.")
+    # Set the device (default to the first GPU if available)
+    device = 0 if torch.cuda.is_available() else 'cpu'
+    print("device id: {}".format(device))
+    torch.cuda.set_device(device) if torch.cuda.is_available() else None
+
+    #assert args.rank == torch.distributed.get_rank()  # Skip the distributed initialization
+    
+    '''
     """Initialize torch.distributed."""
 
     # Manually set the device ids.
@@ -168,6 +181,8 @@ def initialize_distributed(args):
     print('args.world_size =', args.world_size, ', args.rank =', args.rank,
           ', args.local_rank =', args.local_rank)
     assert args.rank == torch.distributed.get_rank()
+
+    '''
 
 def get_schedule(args):
 
