@@ -24,19 +24,19 @@ class BasicDistiller(AbstractDistiller):
         super(BasicDistiller, self).__init__(train_config, distill_config, model_T, model_S, adaptor_T, adaptor_S)
 
     def save_and_callback(self,global_step, step, epoch, callback):
-        if self.rank != 0:
-            torch.distributed.barrier()    # save and eval with single process
-        else:
+       # if self.rank != 0:
+          #  torch.distributed.barrier()    # save and eval with single process
+        #else:
             logger.info(f"Saving at global step {global_step}, epoch step {step + 1} epoch {epoch+1}")
             coreModel = self.model_S.module if hasattr(self.model_S, "module") else self.model_S
             state_dict = coreModel.state_dict()
             torch.save(state_dict, os.path.join(self.t_config.output_dir, f"gs{global_step}.pkl"))
-            if self.local_rank == 0:
-                torch.distributed.barrier()
-        if callback is not None:
-            logger.info("Running callback function...")
-            callback(model=self.model_S, step=global_step)
-            self.model_S.train()
+           # if self.local_rank == 0:
+              #  torch.distributed.barrier()
+            if callback is not None:
+                logger.info("Running callback function...")
+                callback(model=self.model_S, step=global_step)
+                self.model_S.train()
 
 
     def write_loss(self, total_loss, writer_step, losses_dict=None):

@@ -73,7 +73,7 @@ python /content/OFA-Compress/main_distill.py \
     --init-method=${init_method} \
     --student-model-config=${student_model_config} \
     --micro-batch-size=${batch_size} \
-    --num-epochs=5 \
+    --num-epochs=1 \
     --best-score=10e10 \
     --metric=ap \
     --do-train \
