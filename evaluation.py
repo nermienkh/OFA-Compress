@@ -10,7 +10,7 @@ from data_utils.ofa_dataset import collate_tokens
 from typing import Dict, List, Optional
 from textbrewer.distiller_utils import move_to_device
 
-TOKENIZER_PATH = "./tokenizer"
+TOKENIZER_PATH = "/content/OFA-Compress/tokenizer"
 
 def get_perplexity(outputs=None, **kwargs):
     assert 'loss' in outputs
@@ -19,7 +19,7 @@ def get_perplexity(outputs=None, **kwargs):
 
 
 def ddp_evaluate(model, step, eval_dataloader, args, logger):
-    if args.local_rank == -1 or torch.distributed.get_rank() == 0:
+    if args.local_rank == -1 or 0:
         logger.info(f"Do predict in local rank : {args.local_rank}")
         evaluate(model, step, eval_dataloader, args, logger)
         args.evaluate_idx += 1
@@ -111,11 +111,11 @@ def evaluate(model, step, eval_dataloader, args, logger):
                 args.best_score = current_score
                 args.best_step = step
                 save_checkpoint(step, model, args=args, best=True)
-        if torch.distributed.get_rank() == 0:
+        if  0:
             model.save_pretrained(os.path.join(args.output_dir, "saved_mode_step"))
             print(
                 'global rank {} is saving checkpoint at iteration {:7d}'.
-                    format(torch.distributed.get_rank(), step))
+                    format(0, step))
 
     elif args.task in ['refcoco','refcocog','refcocoplus']:
         score_sum = 0.0
@@ -204,11 +204,11 @@ def evaluate(model, step, eval_dataloader, args, logger):
                 args.best_score = current_score
                 args.best_step = step
                 save_checkpoint(step, model, args=args, best=True)
-        if torch.distributed.get_rank() == 0:
+        if  0:
             model.save_pretrained(os.path.join(args.output_dir, "saved_mode_step"))
             print(
                 'global rank {} is saving checkpoint at iteration {:7d}'.
-                    format(torch.distributed.get_rank(), step))
+                    format(0, step))
 
     elif args.task in ['snli_ve']:
         score_sum = 0.0
@@ -306,11 +306,11 @@ def evaluate(model, step, eval_dataloader, args, logger):
                 args.best_score = current_score
                 args.best_step = step
                 save_checkpoint(step, model, args=args, best=True)
-        if torch.distributed.get_rank() == 0:
+        if  0:
             model.save_pretrained(os.path.join(args.output_dir, "saved_mode_step"))
             print(
                 'global rank {} is saving checkpoint at iteration {:7d}'.
-                    format(torch.distributed.get_rank(), step))
+                    format(0, step))
 
     elif args.task in ['vqa_gen']:
         score_sum = 0.0
@@ -420,11 +420,11 @@ def evaluate(model, step, eval_dataloader, args, logger):
                 args.best_score = current_score
                 args.best_step = step
                 save_checkpoint(step, model, args=args, best=True)
-        if torch.distributed.get_rank() == 0:
+        if  0:
             model.save_pretrained(os.path.join(args.output_dir, "saved_mode_step"))
             print(
                 'global rank {} is saving checkpoint at iteration {:7d}'.
-                    format(torch.distributed.get_rank(), step))
+                    format(0, step))
 
     elif args.task in ['pretrain']:
         losses = []
@@ -448,12 +448,12 @@ def evaluate(model, step, eval_dataloader, args, logger):
             args.best_score = current_score
             args.best_step = step
             save_checkpoint(step, model, args=args, best=True)
-        if torch.distributed.get_rank() == 0:
+        if 0:
             idx = args.evaluate_idx % args.keep_last_ckpt_num
             model.save_pretrained(os.path.join(args.output_dir, "saved_mode_step_%d" % idx))
             print(
                 'global rank {} is saving checkpoint at iteration {:7d}'.
-                    format(torch.distributed.get_rank(), step))
+                    format(0, step))
     else:
         raise NotImplementedError(
             f"The eval metric of task {args.task} is not implemented.")
