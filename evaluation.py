@@ -23,10 +23,10 @@ def ddp_evaluate(model, step, eval_dataloader, args, logger):
         logger.info(f"Do predict in local rank : {args.local_rank}")
         evaluate(model, step, eval_dataloader, args, logger)
         args.evaluate_idx += 1
-        if args.local_rank != -1:  # DDP is enabled
-            torch.distributed.barrier()
-    else:
-        torch.distributed.barrier()
+       # if args.local_rank != -1:  # DDP is enabled
+          #  torch.distributed.barrier()
+   # else:
+       # torch.distributed.barrier()
 
 
 def evaluate(model, step, eval_dataloader, args, logger):
